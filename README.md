@@ -1,2 +1,4 @@
 # sush
-spawn a root shell for free
+A convenience tool that allows for passwordless root access on any account.
+
+###
