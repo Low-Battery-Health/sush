@@ -32,4 +32,4 @@ This should display the version and build number (eg. ```sush version 1.3 (Build
 If it says ```zsh: command not found: sush``` or that sush is corrupted, you may need to retry the installation.
 
 # Licence
-This project is licensed under the GNU Public License v3.0 License - [see more](LICENSE)
+This project is licensed under the GNU Public License v3.0 License. [See more](LICENSE).
