@@ -1,4 +1,27 @@
 # sush
 A convenience tool that allows for passwordless root access on any account.
 
-###
+### Features
+- Auto updating
+- A quick ```--exec``` option to run commands without launching a shell
+- Integrity checks to detect corruption
+
+# How to install
+sush requires Linux or MacOS to run.
+```bash
+curl -sL "https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh" | sh
+```
+Or manually download the ```install_sush.sh``` file and run
+```bash
+./install_sush.sh
+```
+
+> **Note:** The installer will automatically upgrade itself to root if not already
+
+### Verify installation
+```bash
+sush --version
+```
+This should display the version and build number (eg. ```sush version 1.3 (Build number 202603a00p6)```)
+
+If it says ```zsh: command not found: sush``` or that sush is corrupted, you may need to retry the installation.
