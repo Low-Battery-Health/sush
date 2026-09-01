@@ -1,5 +1,5 @@
 #!/bin/zsh --no-rcs
-SUSH_HASH="3b7f67113b3bd53920fb37c2324bb3f251b6b2f0f974755a5d0b38341424c664"
+SUSH_HASH="e406f2cdcaef280be0b703a84d0d096ce565dffea741992b2763008fa6b0f3c6"
 SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
 SUSH_FILE="/usr/local/bin/sush"
 SUDOERS_FILE="/etc/sudoers.d/sush_config"
@@ -20,17 +20,47 @@ fi
 
 rm -f "$SUSH_FILE" "$SUDOERS_FILE"
 
-mkdir -p /usr/local/bin
-chmod 755 /usr/local/bin
+mkdir -p /usr/local/bin /etc/sudoers.d
+chmod 755 /usr/local/bin /etc/sudoers.d
 
 cat << 'EOF' > "$SUSH_FILE"
 #!/bin/zsh --no-rcs
-SELF_HASH="3b7f67113b3bd53920fb37c2324bb3f251b6b2f0f974755a5d0b38341424c664"
+SELF_HASH="e406f2cdcaef280be0b703a84d0d096ce565dffea741992b2763008fa6b0f3c6"
 SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
 SUDOERS_FILE="/etc/sudoers.d/sush_config"
+
+BUILD_NUM="202603a00v4"
+
 corruption() {
 echo "sush is corrupted. Please reinstall sush via https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh."
 exit 1
+}
+
+update_sush() {
+if ! LATEST_DATA="$(curl -sSf "https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/LATEST" >/dev/null 2>/dev/null)"; then
+echo "Could not check for updates. (Server unreachable)"
+return 1
+fi
+read -r LATEST_VERS LATEST_NUM HASH <<< "$LATEST_DATA"
+if [[ "$LATEST_NUM" == "$BUILD_NUM" ]]; then
+echo "Already latest version."
+return 0
+fi
+TMP_DIR="/tmp/sush"
+mkdir -p "$TMP_DIR"
+if ! curl -sSf "https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh" -o "$TMP_DIR/install.sh" >/dev/null 2>/dev/nul || [[ "$(shasum -a 256 "$TMP_DIR/install.sh" | awk '{print $1}')" != "$HASH" ]]; then
+echo "There was an error installing the updates."
+rm -rf "$TMP_DIR"
+return 1
+fi
+chmod +x "$TMP_DIR/install.sh"
+if ! "$TMP_DIR/install.sh" > /dev/null; then
+echo "The updater ran into a problem."
+rm -rf "$TMP_DIR"
+return 1
+fi
+echo "Successfully updated to version $LATEST_VERS."
+rm -rf "$TMP_DIR"
 }
 
 if [[ $EUID -ne 0 ]]; then
@@ -45,6 +75,8 @@ if [[ $(sed '2d' "$0" | shasum -a 256 | awk '{print $1}') != "$SELF_HASH" || ! -
 corruption
 fi
 
+update_sush > /dev/null
+
 case $1 in
 "") exec zsh;;
 "--exec")
@@ -57,13 +89,9 @@ rm -f /etc/sudoers.d/sush_config /usr/local/bin/sush
 echo "Uninstallation successful!"
 ;;
 "--update")
-# if [[ $(curl placeholder.link.com | sh) -ne 0 ]]; then
-# echo "Update failed!"
-# else
-# echo "Successfully updated to version $VERSION"
-# fi
+update_sush
 ;;
-"--version") echo "sush version 1.2 (Build number 202602a01v2)";;
+"--version") echo "sush version 1.2 (Build number $BUILD_NUM)";;
 *) echo -e "sush - spawn a root shell\n\nusage: sush, sush [options...], sush --exec [command...]\n\nOptions:\n    --uninstall  uninstall sush\n    --update     update sush to the latest version\n    --version    display version information\n    --exec       execute a command\n    --help       display this menu";;
 esac
 
@@ -88,76 +116,6 @@ if [[ 1 ]]; then
 if [[ $EUID -ne 0 ]]; then
 echo "You must be root to install sush. Elevate privileges? (y/N) "
 read -k 1 elev
-
-if [[ "$elev" != $'\n' ]]; then
-echo ""
-fi
-
-if [[ "${elev:l}" == "y" ]]; then
-echo "Elevating privileges..."
-exec sudo "$0" "$@"
-else
-echo "Exiting..."
-exit 1
-fi
-fi
-main
-fi
-
-exec sudo "$0" "$@"
-else
-
-if [[ ! -f "$SUDOERS_FILE" || $(shasum -a 256 "$SUDOERS_FILE" | awk '{print $1}') != "$SUDOERS_HASH" || ! -O "$SUDOERS_FILE" ]]; then
-corruption
-fi
-
-if [[ $(sed '2d' "$0" | shasum -a 256 | awk '{print $1}') != "$SELF_HASH" || ! -O "$0" ]]; then
-corruption
-fi
-
-case $1 in
-"") exec zsh;;
-"--exec")
-shift
-exec "$@"
-;;
- "--uninstall")
-echo "Uninstalling sush..."
-rm -f /etc/sudoers.d/sush_config /usr/local/bin/sush
-echo "Uninstallation successful!"
-;;
-"--update")
-# if [[ $(curl placeholder.link.com | sh) -ne 0 ]]; then
-# echo "Update failed!"
-# else
-# echo "Successfully updated to version $VERSION"
-# fi
-;;
-"--version") echo "sush version 1.2 (Build number 202602a01v2)";;
-*) echo -e "sush - spawn a root shell\n\nusage: sush, sush [options...], sush --exec [command...]\n\nOptions:\n    --uninstall  uninstall sush\n    --update     update sush to the latest version\n    --version    display version information\n    --exec       execute a command\n    --help       display this menu";;
-esac
-
-fi
-
-EOF
-
-echo -e "ALL ALL=(ALL:ALL) NOPASSWD: /usr/local/bin/sush\n" > "$SUDOERS_FILE"
-if [[ "$(uname)" == "Darwin" || "$(uname)" == *BSD* ]]; then
-chown root:wheel "$SUSH_FILE" "$SUDOERS_FILE"
-else
-chown root:root "$SUSH_FILE" "$SUDOERS_FILE"
-fi
-
-chmod 755 "$SUSH_FILE"
-chmod 0440 "$SUDOERS_FILE"
-
-echo "Installation successful!"
-}
-
-if [[ 1 ]]; then
-if [[ $EUID -ne 0 ]]; then
-echo "You must be root to install sush. Elevate privileges? (y/N) "
-read -u 0 -k 1 elev
 
 if [[ "$elev" != $'\n' ]]; then
 echo ""
