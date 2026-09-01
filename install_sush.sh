@@ -117,6 +117,19 @@ echo "Installation successful!"
 }
 
 if [[ 1 ]]; then
+
+if [[ ! -z "$1" ]]; then
+if [[ "$1" == "--chroot" ]]; then
+if [[ ! -d "$2" ]]; then
+echo "$0: no such directory: $2"
+exit 1
+fi
+else
+echo "$0: invalid option: $1"
+exit 1
+fi
+fi
+
 if [[ $EUID -ne 0 ]]; then
 echo "You must be root to install sush. Elevate privileges? (y/N) "
 read -k 1 elev
@@ -133,5 +146,5 @@ echo "Exiting..."
 exit 1
 fi
 fi
-main
+main "$@"
 fi
