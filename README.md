@@ -25,7 +25,7 @@ Or manually download the ```install_sush.sh``` file and run
 ./install_sush.sh
 ```
 
-> **Note:** The installer will automatically upgrade itself to root if not already
+> **Note:** The installer will automatically upgrade itself to root if not already via sudo. You may be prompted to type in your password.
 
 ### How to install on another partition/volume or directory
 ```bash
@@ -43,31 +43,25 @@ If it says ```zsh: command not found: sush``` or that sush is corrupted, you may
 # Usage
 To get started, simply type ```sush``` in the terminal for a root shell.
 ```bash
+sush
+```
+Expected output:
+```bash
 Low-Battery-Health@LBH-Debian:~$ sush
 root@LBH-Debian:~# whoami
 root
 root@LBH-Debian:~#
 ```
 To execute a singular command without spawning a shell, type ```sush --exec <command>```.
+
+Example:
 ```bash
-Low-Battery-Health@LBH-Debian:~$ sush --exec whoami
-root
-Low-Battery-Health@LBH-Debian:~$
+sush --exec whoami
 ```
-For more usage information, show the help menu by typing ```sush --help```.
+
+For more usage information, show the help menu.
 ```bash
-Low-Battery-Health@LBH-Debian:~$ sush --help
-sush - spawn a root shell
-
-usage: sush, sush [options...], sush --exec [command...]
-
-Options:
-    --uninstall  uninstall sush
-    --update     update sush to the latest version
-    --version    display version information
-    --exec       execute a command
-    --help       display this menu
-Low-Battery-Health@LBH-Debian:~$
+sush --help
 ```
 
 # Licence
