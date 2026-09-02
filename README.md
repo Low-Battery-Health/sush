@@ -1,7 +1,7 @@
 # sush
 A fast and secure convenience tool that allows for passwordless root access on any account.
 
-Easy access to root privileges without having to type your password or write configuration files.
+Get easy access to root privileges without having to type your password or write configuration files (other than at installation in which the installer script does automatically). Once installed, running sush automatically elevates to a root shell, while ```sush --exec <command>``` can be used to execute a specific command as root without the overhead of a full shell.
 
 [![Version](https://img.shields.io/badge/version-1.3-ff8000)](https://github.com/Low-Battery-Health/sush/blob/main/install_sush.sh)
 [![Version](https://img.shields.io/badge/speed-fast-0080ff)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
