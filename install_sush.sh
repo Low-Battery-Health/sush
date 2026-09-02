@@ -1,8 +1,8 @@
-#!/bin/zsh --no-rcs
+#!/bin/bash --norc
 
 #   ========================================================================
 #
-#   install_sush.sh - Official sush installer script
+#   install_sush.bash - Official sush installer script
 #
 #   Copyright (C) 2026  Low Battery Health
 #
@@ -31,13 +31,9 @@ SUSH_FILE="$ROOT_DIR/usr/local/bin/sush"
 SUDOERS_FILE="$ROOT_DIR/etc/sudoers.d/sush_config"
 if [[ -f "$SUSH_FILE" && $(sed '/SELF_HASH=/d' "$SUSH_FILE" | shasum -a 256 | awk '{print $1}') == "$SUSH_HASH" && -O "$SUSH_FILE" && -f "$SUDOERS_FILE" && $(shasum -a 256 "$SUDOERS_FILE" | awk '{print $1}') == "$SUDOERS_HASH" && -O "$SUDOERS_FILE" ]]; then
 echo "sush is already installed. Replace files? (y/N) "
-read -k 1 repl
+read repl
 
-if [[ "$repl" != $'\n' ]]; then
-echo ""
-fi
-
-if [[ "${repl:l}" != "y" ]]; then
+if [[ "$repl" != "y" && "$repl" != "Y" ]]; then
 echo "Exiting..."
 exit 1
 fi
@@ -174,13 +170,9 @@ fi
 
 if [[ $EUID -ne 0 ]]; then
 echo "You must be root to install sush. Elevate privileges? (y/N) "
-read -k 1 elev
+read elev
 
-if [[ "$elev" != $'\n' ]]; then
-echo ""
-fi
-
-if [[ "${elev:l}" == "y" ]]; then
+if [[ "$elev" == "y" || "$elev" == "Y" ]]; then
 echo "Elevating privileges..."
 exec sudo "$0" "$@"
 else
