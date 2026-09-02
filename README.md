@@ -71,4 +71,4 @@ Low-Battery-Health@LBH-Debian:~$
 ```
 
 # Licence
-This project is licensed under the GNU Public License v3.0 License. [See more](LICENSE).
+This project is licensed under the GNU Public License v3.0 Licence. [See more](LICENSE).
