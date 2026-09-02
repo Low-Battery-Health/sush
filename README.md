@@ -5,7 +5,7 @@ Get easy access to root privileges without having to type your password or write
 
 [![Version](https://img.shields.io/badge/version-1.3-ff8000)](https://github.com/Low-Battery-Health/sush/blob/main/install_sush.sh)
 [![Version](https://img.shields.io/badge/speed-fast-0080ff)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-[![License](https://img.shields.io/badge/license-AGPLv3.0-8000ff)](LICENSE)
+[![License](https://img.shields.io/badge/licence-AGPLv3.0-8000ff)](LICENSE)
 
 ## Why sush
 - Extremely fast and lightweight
