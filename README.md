@@ -16,7 +16,7 @@ Get easy access to root privileges without having to type your password or write
 - Extremely easy uninstallation (```sush --uninstall```)
 
 # Etymology
-```sush``` is short for SuperUser SHell (like how sudo is superuser do).
+```sush``` is short for **S**uper**U**ser **SH**ell (like how sudo is superuser do).
 
 
 Pronounced ```/sʌʃ/``` (rhymes with lush, mush, rush).
