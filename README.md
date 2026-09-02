@@ -1,6 +1,8 @@
 # sush
 A fast and secure convenience tool that allows for passwordless root access on any account.
 
+Easy access to root privileges without having to type your password or write configuration files.
+
 [![Version](https://img.shields.io/badge/version-1.3-ff8000)](https://github.com/Low-Battery-Health/sush/blob/main/install_sush.sh)
 [![Version](https://img.shields.io/badge/speed-fast-0080ff)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 [![License](https://img.shields.io/badge/license-GPLv3.0-8000ff)](LICENSE)
