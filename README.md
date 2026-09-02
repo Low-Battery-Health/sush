@@ -18,7 +18,7 @@ Get easy access to root privileges without having to type your password or write
 # How to install
 sush requires Linux or MacOS to run.
 ```bash
-curl -sL "https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh" | sh
+/bin/zsh -c "$(curl -fsSL 'https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh')"
 ```
 Or manually download the ```install_sush.sh``` file and run
 ```bash
