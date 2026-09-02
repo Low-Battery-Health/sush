@@ -25,7 +25,7 @@ Or manually download the ```install_sush.sh``` file and run
 ./install_sush.sh
 ```
 
-> **Note:** The installer will automatically upgrade itself to root if not already via sudo. You may be prompted to type in your password.
+> **Note:** The installer will automatically elevate itself to root if not already via sudo. You may be prompted to type in your password.
 
 ### How to install on another partition/volume or directory
 ```bash
