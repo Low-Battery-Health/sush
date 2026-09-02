@@ -17,6 +17,7 @@ Get easy access to root privileges without having to type your password or write
 
 # Etymology
 ```sush``` is short for SuperUser SHell (like how sudo is superuser do).
+
 Pronounced ```/sʌʃ/``` (rhymes with lush, mush, rush).
 
 # How to install
