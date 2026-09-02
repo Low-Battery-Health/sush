@@ -5,10 +5,13 @@ A fast and secure convenience tool that allows for passwordless root access on a
 [![Version](https://img.shields.io/badge/speed-fast-0080ff)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 [![License](https://img.shields.io/badge/license-GPLv3.0-8000ff)](LICENSE)
 
-### Features
+## Why sush
+- Extremely fast and lightweight
 - Auto updating
 - A quick ```--exec``` option to run commands without launching a shell
 - Automatic integrity checks to detect corruption
+- Instant install
+- Extremely easy uninstallation (```sush --uninstall```)
 
 # How to install
 sush requires Linux or MacOS to run.
