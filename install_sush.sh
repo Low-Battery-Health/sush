@@ -1,14 +1,35 @@
 #!/bin/zsh --no-rcs
+
+#   ========================================================================
+#
+#   install_sush.sh - Official sush installer script
+#
+#   Copyright (C) 2026  Low Battery Health
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU Affero General Public License as published
+#   by the Free Software Foundation, version 3 only.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU Affero General Public License for more details.
+#
+#   You should have received a copy of the GNU Affero General Public License
+#   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#   ========================================================================
+
 main() {
 ROOT_DIR=""
 if [[ "$1" == "--chroot" && -d "$2" ]]; then
 ROOT_DIR="${2%/}"
 fi
-SUSH_HASH="26b74a21d055106817a013e66d91f2e1895de26df16a0140c2f495f6456e2b06"
+SUSH_HASH="277c2ee80bdfa5ca12ca68f63ca6fe46fb7bb8318458f16cfcd359df54e4e9bf"
 SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
 SUSH_FILE="$ROOT_DIR/usr/local/bin/sush"
 SUDOERS_FILE="$ROOT_DIR/etc/sudoers.d/sush_config"
-if [[ -f "$SUSH_FILE" && $(sed '2d' "$SUSH_FILE" | shasum -a 256 | awk '{print $1}') == "$SUSH_HASH" && -O "$SUSH_FILE" && -f "$SUDOERS_FILE" && $(shasum -a 256 "$SUDOERS_FILE" | awk '{print $1}') == "$SUDOERS_HASH" && -O "$SUDOERS_FILE" ]]; then
+if [[ -f "$SUSH_FILE" && $(sed '/SELF_HASH=/d' "$SUSH_FILE" | shasum -a 256 | awk '{print $1}') == "$SUSH_HASH" && -O "$SUSH_FILE" && -f "$SUDOERS_FILE" && $(shasum -a 256 "$SUDOERS_FILE" | awk '{print $1}') == "$SUDOERS_HASH" && -O "$SUDOERS_FILE" ]]; then
 echo "sush is already installed. Replace files? (y/N) "
 read -k 1 repl
 
@@ -29,11 +50,32 @@ chmod 755 "$ROOT_DIR/usr/local/bin" "$ROOT_DIR/etc/sudoers.d"
 
 cat << 'EOF' > "$SUSH_FILE"
 #!/bin/zsh --no-rcs
-SELF_HASH="26b74a21d055106817a013e66d91f2e1895de26df16a0140c2f495f6456e2b06"
+
+#   ========================================================================
+#
+#   install_sush.sh - Official sush installer script
+#
+#   Copyright (C) 2026  Low Battery Health
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU Affero General Public License as published
+#   by the Free Software Foundation, version 3 only.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU Affero General Public License for more details.
+#
+#   You should have received a copy of the GNU Affero General Public License
+#   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#   ========================================================================
+
+SELF_HASH="277c2ee80bdfa5ca12ca68f63ca6fe46fb7bb8318458f16cfcd359df54e4e9bf"
 SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
 SUDOERS_FILE="/etc/sudoers.d/sush_config"
 
-BUILD_NUM="202603a00p6"
+BUILD_NUM="202603a01p"
 
 corruption() {
 echo "sush is corrupted. Please reinstall sush via https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh."
@@ -75,7 +117,7 @@ if [[ ! -f "$SUDOERS_FILE" || $(shasum -a 256 "$SUDOERS_FILE" | awk '{print $1}'
 corruption
 fi
 
-if [[ $(sed '2d' "$0" | shasum -a 256 | awk '{print $1}') != "$SELF_HASH" || ! -O "$0" ]]; then
+if [[ $(sed '/SELF_HASH=/d' "$0" | shasum -a 256 | awk '{print $1}') != "$SELF_HASH" || ! -O "$0" ]]; then
 corruption
 fi
 
