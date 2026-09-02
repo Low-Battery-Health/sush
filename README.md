@@ -52,6 +52,11 @@ root@LBH-Debian:~# whoami
 root
 root@LBH-Debian:~#
 ```
+To return to user privileges, exit the shell.
+```
+exit
+```
+
 To execute a singular command without spawning a shell, type ```sush --exec <command>```.
 
 Example:
