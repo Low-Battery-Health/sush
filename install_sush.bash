@@ -141,7 +141,7 @@ fi
 
 EOF
 
-printf "ALL ALL=(ALL:ALL) NOPASSWD: /usr/local/bin/sush\n" > "$SUDOERS_FILE"
+printf "ALL ALL=(ALL:ALL) NOPASSWD: /usr/local/bin/sush\n\n" > "$SUDOERS_FILE"
 if [[ "$(uname)" == "Darwin" || "$(uname)" == *BSD* ]]; then
 chown root:wheel "$SUSH_FILE" "$SUDOERS_FILE"
 else
