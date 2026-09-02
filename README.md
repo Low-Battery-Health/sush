@@ -1,6 +1,9 @@
 # sush
 A convenience tool that allows for passwordless root access on any account.
 
+[![Version](https://img.shields.io/badge/version-1.3-ff8000)]()
+[![License](https://img.shields.io/badge/license-GPLv3.0-0080ff)](LICENSE)
+
 ### Features
 - Auto updating
 - A quick ```--exec``` option to run commands without launching a shell
