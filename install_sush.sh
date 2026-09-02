@@ -25,7 +25,7 @@ ROOT_DIR=""
 if [[ "$1" == "--chroot" && -d "$2" ]]; then
 ROOT_DIR="${2%/}"
 fi
-SUSH_HASH="277c2ee80bdfa5ca12ca68f63ca6fe46fb7bb8318458f16cfcd359df54e4e9bf"
+SUSH_HASH="05aa0bad57e412a8b0b2223aa7dec616867ee48e164eb68a7a38de5886baaed7"
 SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
 SUSH_FILE="$ROOT_DIR/usr/local/bin/sush"
 SUDOERS_FILE="$ROOT_DIR/etc/sudoers.d/sush_config"
@@ -53,7 +53,7 @@ cat << 'EOF' > "$SUSH_FILE"
 
 #   ========================================================================
 #
-#   install_sush.sh - Official sush installer script
+#   sush - secure zsh wrapper for privilege elevation
 #
 #   Copyright (C) 2026  Low Battery Health
 #
@@ -71,11 +71,11 @@ cat << 'EOF' > "$SUSH_FILE"
 #
 #   ========================================================================
 
-SELF_HASH="277c2ee80bdfa5ca12ca68f63ca6fe46fb7bb8318458f16cfcd359df54e4e9bf"
+SELF_HASH="05aa0bad57e412a8b0b2223aa7dec616867ee48e164eb68a7a38de5886baaed7"
 SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
 SUDOERS_FILE="/etc/sudoers.d/sush_config"
 
-BUILD_NUM="202603a01p"
+BUILD_NUM="202603a01p2"
 
 corruption() {
 echo "sush is corrupted. Please reinstall sush via https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh."
