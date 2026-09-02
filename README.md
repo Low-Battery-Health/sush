@@ -41,22 +41,34 @@ This should display the version and build number (eg. ```sush version 1.3 (Build
 If it says ```zsh: command not found: sush``` or that sush is corrupted, you may need to retry the installation.
 
 # Usage
-To get started, simply type ```sush``` in the terminal for a root shell
+To get started, simply type ```sush``` in the terminal for a root shell.
 ```bash
 Low-Battery-Health@LBH-Debian:~$ sush
 root@LBH-Debian:~# whoami
 root
 root@LBH-Debian:~#
 ```
-To execute a singular command without spawning a shell, type ```sush --exec <command>```
+To execute a singular command without spawning a shell, type ```sush --exec <command>```.
 ```bash
 Low-Battery-Health@LBH-Debian:~$ sush --exec whoami
 root
 Low-Battery-Health@LBH-Debian:~$
 ```
+For more usage information, show the help menu by typing ```sush --help```.
+```bash
+Low-Battery-Health@LBH-Debian:~$ sush --help
+sush - spawn a root shell
 
-To show the help menu, type ```sush --help```
+usage: sush, sush [options...], sush --exec [command...]
 
+Options:
+    --uninstall  uninstall sush
+    --update     update sush to the latest version
+    --version    display version information
+    --exec       execute a command
+    --help       display this menu
+Low-Battery-Health@LBH-Debian:~$
+```
 
 # Licence
 This project is licensed under the GNU Public License v3.0 License. [See more](LICENSE).
