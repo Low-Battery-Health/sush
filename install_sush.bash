@@ -45,27 +45,6 @@ mkdir -p "$ROOT_DIR/usr/local/bin" "$ROOT_DIR/etc/sudoers.d"
 chmod 755 "$ROOT_DIR/usr/local/bin" "$ROOT_DIR/etc/sudoers.d"
 
 cat << 'EOF' > "$SUSH_FILE"
-#!/bin/zsh --no-rcs
-
-#   ========================================================================
-#
-#   sush - secure zsh wrapper for privilege elevation
-#
-#   Copyright (C) 2026  Low Battery Health
-#
-#   This program is free software: you can redistribute it and/or modify
-#   it under the terms of the GNU Affero General Public License as published
-#   by the Free Software Foundation, version 3 only.
-#
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU Affero General Public License for more details.
-#
-#   You should have received a copy of the GNU Affero General Public License
-#   along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-#   ========================================================================
 
 SELF_HASH="05aa0bad57e412a8b0b2223aa7dec616867ee48e164eb68a7a38de5886baaed7"
 SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
