@@ -20,6 +20,22 @@
 #
 #   ========================================================================
 
+check_hash() {
+if command -v sha256sum > /dev/null 2>/dev/null; then
+[ "$(sha256sum "$1" | awk '{print $1}')" = "$2" ]
+elif command -v shasum > /dev/null 2>/dev/null; then
+[ "$(shasum -a 256 "$1" | awk '{print $1}')" = "$2" ]
+else
+printf "Warning: neither shasum nor sha256sum found. Skip integrity check? (y/N): "
+read skip
+if [ "$skip" != "y" ] && [ "$skip" != "Y" ]; then
+return 1
+else
+return 0
+fi
+fi
+}
+
 main() {
 ROOT_DIR=""
 ETC_DIR="/etc"
@@ -29,12 +45,12 @@ fi
 if [ "$(uname)" = "Darwin" ]; then
 ETC_DIR="/private/etc"
 fi
-SUSH_HASH="05aa0bad57e412a8b0b2223aa7dec616867ee48e164eb68a7a38de5886baaed7"
-SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
+SUSH_HASH="7162bffa1dee9de76d1d7a23b8ab532890f1ae244ad2b0279eb0b18580297e19"
+SUDOERS_HASH="61137b81f7f535880d5a3e917e8d1f530fc5165ac36f439a849c9b28ac35ec08"
 SUSH_FILE="$ROOT_DIR/usr/local/bin/sush"
 SUDOERS_FILE="$ROOT_DIR$ETC_DIR/sudoers.d/sush_config"
-if ! ( [ "$(uname)" = "Darwin" ] && launchctl list | grep -q "com.apple.recoveryosd" > /dev/null ) && [ -f "$SUSH_FILE" ] && [ "$(sed '/SELF_HASH=/d' "$SUSH_FILE" | shasum -a 256 | awk '{print $1}')" = "$SUSH_HASH" ] && [ -O "$SUSH_FILE" ] && [ -f "$SUDOERS_FILE" ] && [ "$(shasum -a 256 "$SUDOERS_FILE" | awk '{print $1}')" = "$SUDOERS_HASH" ] && [ -O "$SUDOERS_FILE" ]; then
-echo "sush is already installed. Replace files? (y/N) "
+if ! ( [ "$(uname)" = "Darwin" ] && launchctl list | grep -q "com.apple.recoveryosd" > /dev/null ) && [ -f "$SUSH_FILE" ] && sed '/SELF_HASH=/d' "$SUSH_FILE" | check_hash "-" "$SUSH_HASH" && [ -O "$SUSH_FILE" ] && [ -f "$SUDOERS_FILE" ] && check_hash "$SUDOERS_FILE" "$SUDOERS_HASH" && [ -O "$SUDOERS_FILE" ]; then
+printf "sush is already installed. Replace files? (y/N): "
 read repl
 
 if [ "$repl" != "y" ] && [ "$repl" != "Y" ]; then
@@ -71,11 +87,27 @@ cat << 'EOF' > "$SUSH_FILE"
 #
 #   ========================================================================
 
-SELF_HASH="05aa0bad57e412a8b0b2223aa7dec616867ee48e164eb68a7a38de5886baaed7"
-SUDOERS_HASH="4037056279c20a24c14fffab8b832b816e4600417c61a6bce19832416f303a1b"
+SELF_HASH="7162bffa1dee9de76d1d7a23b8ab532890f1ae244ad2b0279eb0b18580297e19"
+SUDOERS_HASH="61137b81f7f535880d5a3e917e8d1f530fc5165ac36f439a849c9b28ac35ec08"
 SUDOERS_FILE="/etc/sudoers.d/sush_config"
 
-BUILD_NUM="202603a01p2"
+BUILD_NUM="202603a01p3"
+
+check_hash() {
+if command -v sha256sum > /dev/null 2>/dev/null; then
+[ "$(sha256sum "$1" | awk '{print $1}')" = "$2" ]
+elif command -v shasum > /dev/null 2>/dev/null; then
+[ "$(shasum -a 256 "$1" | awk '{print $1}')" = "$2" ]
+else
+printf "Warning: neither shasum nor sha256sum found. Skip integrity check? (y/N): "
+read skip
+if [ "$skip" != "y" ] && [ "$skip" != "Y" ]; then
+return 1
+else
+return 0
+fi
+fi
+}
 
 corruption() {
 echo "sush is corrupted. Please reinstall sush via https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh."
@@ -109,15 +141,15 @@ echo "Successfully updated to version $LATEST_VERS."
 rm -rf "$TMP_DIR"
 }
 
-if [[ $EUID -ne 0 ]]; then
+if [ "$(id -u)" -ne 0 ]; then
 exec sudo "$0" "$@"
 else
 
-if [[ ! -f "$SUDOERS_FILE" || $(shasum -a 256 "$SUDOERS_FILE" | awk '{print $1}') != "$SUDOERS_HASH" || ! -O "$SUDOERS_FILE" ]]; then
+if [ ! -f "$SUDOERS_FILE" ] || ! check_hash "$SUDOERS_FILE" "$SUDOERS_HASH" || [ ! -O "$SUDOERS_FILE" ]; then
 corruption
 fi
 
-if [[ $(sed '/SELF_HASH=/d' "$0" | shasum -a 256 | awk '{print $1}') != "$SELF_HASH" || ! -O "$0" ]]; then
+if ! "$(sed '/SELF_HASH=/d' "$0")" | check_hash "-" "$SELF_HASH" || [ ! -O "$0" ]; then
 corruption
 fi
 
@@ -138,14 +170,14 @@ echo "Uninstallation successful!"
 update_sush
 ;;
 "--version") echo "sush version 1.3 (Build number $BUILD_NUM)";;
-*) echo -e "sush - spawn a root shell\n\nusage: sush, sush [options...], sush --exec [command...]\n\nOptions:\n    --uninstall  uninstall sush\n    --update     update sush to the latest version\n    --version    display version information\n    --exec       execute a command\n    --help       display this menu";;
+*) printf "sush - spawn a root shell\n\nusage: sush, sush [options...], sush --exec [command...]\n\nOptions:\n    --uninstall  uninstall sush\n    --update     update sush to the latest version\n    --version    display version information\n    --exec       execute a command\n    --help       display this menu\n";;
 esac
 
 fi
 
 EOF
 
-printf "ALL ALL=(ALL:ALL) NOPASSWD: /usr/local/bin/sush\n\n" > "$SUDOERS_FILE"
+printf "ALL ALL=(ALL:ALL) NOPASSWD: /usr/local/bin/sush\n" > "$SUDOERS_FILE"
 case "$(uname)" in
 Darwin|*BSD*) chown root:wheel "$SUSH_FILE" "$SUDOERS_FILE" ;;
 *) chown root:root "$SUSH_FILE" "$SUDOERS_FILE" ;;
@@ -172,7 +204,7 @@ fi
 fi
 
 if [ "$(id -u)" -ne 0 ]; then
-echo "You must be root to install sush. Elevate privileges? (y/N) "
+printf "You must be root to install sush. Elevate privileges? (y/N): "
 read elev
 
 if [ "$elev" = "y" ] || [ "$elev" = "Y" ]; then
