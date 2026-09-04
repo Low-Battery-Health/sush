@@ -45,11 +45,11 @@ fi
 if [ "$(uname)" = "Darwin" ]; then
 ETC_DIR="/private/etc"
 fi
-SUSH_HASH="7162bffa1dee9de76d1d7a23b8ab532890f1ae244ad2b0279eb0b18580297e19"
+SUSH_HASH="03be2776390800ea4144dcd8bf0d94a98c411c68eb5550529bf7bed5c6ce978a"
 SUDOERS_HASH="61137b81f7f535880d5a3e917e8d1f530fc5165ac36f439a849c9b28ac35ec08"
 SUSH_FILE="$ROOT_DIR/usr/local/bin/sush"
 SUDOERS_FILE="$ROOT_DIR$ETC_DIR/sudoers.d/sush_config"
-if ! ( [ "$(uname)" = "Darwin" ] && launchctl list | grep -q "com.apple.recoveryosd" > /dev/null ) && [ -f "$SUSH_FILE" ] && sed '/SELF_HASH=/d' "$SUSH_FILE" | check_hash "-" "$SUSH_HASH" && [ -O "$SUSH_FILE" ] && [ -f "$SUDOERS_FILE" ] && check_hash "$SUDOERS_FILE" "$SUDOERS_HASH" && [ -O "$SUDOERS_FILE" ]; then
+if ! ( [ "$(uname)" = "Darwin" ] && launchctl list | grep -q "com.apple.recoveryosd" > /dev/null ) && [ -f "$SUSH_FILE" ] && sed '/^SELF_HASH=/d' "$SUSH_FILE" | check_hash "-" "$SUSH_HASH" && [ -O "$SUSH_FILE" ] && [ -f "$SUDOERS_FILE" ] && check_hash "$SUDOERS_FILE" "$SUDOERS_HASH" && [ -O "$SUDOERS_FILE" ]; then
 printf "sush is already installed. Replace files? (y/N): "
 read repl
 
@@ -87,7 +87,7 @@ cat << 'EOF' > "$SUSH_FILE"
 #
 #   ========================================================================
 
-SELF_HASH="7162bffa1dee9de76d1d7a23b8ab532890f1ae244ad2b0279eb0b18580297e19"
+SELF_HASH="03be2776390800ea4144dcd8bf0d94a98c411c68eb5550529bf7bed5c6ce978a"
 SUDOERS_HASH="61137b81f7f535880d5a3e917e8d1f530fc5165ac36f439a849c9b28ac35ec08"
 SUDOERS_FILE="/etc/sudoers.d/sush_config"
 
@@ -149,7 +149,7 @@ if [ ! -f "$SUDOERS_FILE" ] || ! check_hash "$SUDOERS_FILE" "$SUDOERS_HASH" || [
 corruption
 fi
 
-if ! "$(sed '/SELF_HASH=/d' "$0")" | check_hash "-" "$SELF_HASH" || [ ! -O "$0" ]; then
+if ! sed '/^SELF_HASH=/d' "$0" | check_hash "-" "$SELF_HASH" || [ ! -O "$0" ]; then
 corruption
 fi
 
