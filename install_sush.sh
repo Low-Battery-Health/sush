@@ -45,7 +45,7 @@ fi
 if [ "$(uname)" = "Darwin" ]; then
 ETC_DIR="/private/etc"
 fi
-SUSH_HASH="03be2776390800ea4144dcd8bf0d94a98c411c68eb5550529bf7bed5c6ce978a"
+SUSH_HASH="cca0bb8467e76d5db9861eb280a7fab468299b6d5b73e2fc7dfbdddde98eafca"
 SUDOERS_HASH="61137b81f7f535880d5a3e917e8d1f530fc5165ac36f439a849c9b28ac35ec08"
 SUSH_FILE="$ROOT_DIR/usr/local/bin/sush"
 SUDOERS_FILE="$ROOT_DIR$ETC_DIR/sudoers.d/sush_config"
@@ -87,7 +87,7 @@ cat << 'EOF' > "$SUSH_FILE"
 #
 #   ========================================================================
 
-SELF_HASH="03be2776390800ea4144dcd8bf0d94a98c411c68eb5550529bf7bed5c6ce978a"
+SELF_HASH="cca0bb8467e76d5db9861eb280a7fab468299b6d5b73e2fc7dfbdddde98eafca"
 SUDOERS_HASH="61137b81f7f535880d5a3e917e8d1f530fc5165ac36f439a849c9b28ac35ec08"
 SUDOERS_FILE="/etc/sudoers.d/sush_config"
 
@@ -126,7 +126,7 @@ return 0
 fi
 TMP_DIR="/tmp/sush"
 mkdir -p "$TMP_DIR"
-if ! curl -sSf "https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh" -o "$TMP_DIR/install.sh" 2>/dev/null || [[ "$(shasum -a 256 "$TMP_DIR/install.sh" | awk '{print $1}')" != "$HASH" ]]; then
+if ! curl -sSf "https://raw.githubusercontent.com/Low-Battery-Health/sush/refs/heads/main/install_sush.sh" -o "$TMP_DIR/install.sh" 2>/dev/null || ! check_hash "$TMP_DIR/install.sh" "$HASH"; then
 echo "There was an error installing the updates."
 rm -rf "$TMP_DIR"
 return 1
